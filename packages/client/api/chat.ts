@@ -12,10 +12,13 @@ export default async function handler(req: any, res: any) {
   }
 
   const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
+  const keyPresent = Boolean(apiKey && apiKey.length > 0);
+  console.log('OPENAI_API_KEY present:', keyPresent);
+  if (!keyPresent) {
     return res.status(500).json({ error: 'Server misconfigured: OPENAI_API_KEY missing' });
   }
   try {
+    console.log('Received prompt length:', prompt.length);
     const r = await fetch('https://api.openai.com/v1/responses', {
       method: 'POST',
       headers: {
@@ -30,9 +33,16 @@ export default async function handler(req: any, res: any) {
       }),
     });
 
-    const json: any = await r.json();
+    const text = await r.text();
+    let json: any;
+    try {
+      json = text ? JSON.parse(text) : {};
+    } catch (parseErr) {
+      console.error('OpenAI response not JSON:', text);
+      return res.status(502).json({ error: 'OpenAI API error', details: text });
+    }
+    console.log('OpenAI response status:', r.status, 'body:', json);
     if (!r.ok) {
-      console.error('OpenAI API error', json);
       const errMsg = json.error?.message || JSON.stringify(json);
       return res.status(502).json({ error: 'OpenAI API error', details: errMsg });
     }
