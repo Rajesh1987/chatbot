@@ -1,0 +1,27 @@
+{
+   "name": "server",
+   "module": "index.ts",
+   "type": "module",
+   "private": true,
+   "scripts": {
+      "start": "bun run index.ts",
+      "dev": "bun --watch index.ts"
+   },
+   "devDependencies": {
+      "@types/bun": "latest",
+      "@types/express": "^5.0.6",
+      "prisma": "^7.2.0"
+   },
+   "peerDependencies": {
+      "typescript": "^5"
+   },
+   "dependencies": {
+      "@huggingface/inference": "^4.13.5",
+      "@prisma/client": "^7.2.0",
+      "dotenv": "^17.2.3",
+      "express": "^5.2.1",
+      "ollama": "^0.6.3",
+      "openai": "^6.15.0",
+      "zod": "^4.2.1"
+   }
+}

@@ -1,0 +1,13 @@
+
+import Chatbot from './components/chat/chatBot';
+
+function App() {
+
+   return (
+      <div className="p-4 h-screen w-full">
+         <Chatbot />
+      </div>
+   );
+}
+
+export default App;

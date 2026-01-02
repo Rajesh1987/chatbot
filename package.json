@@ -1,0 +1,29 @@
+{
+  "name": "my-app",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "bun run index.ts",
+    "format": "prettier --write .",
+    "build": "bun run --cwd packages/server build && bun run --cwd packages/client build",
+    "start": "bun run --cwd packages/server start && bun run --cwd packages/client preview",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/express": "^5.0.6",
+    "concurrently": "^9.2.1",
+    "husky": "^9.1.7",
+    "prettier": "^3.7.4"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
