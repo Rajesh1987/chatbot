@@ -29,7 +29,8 @@ export default async function handler(req: any, res: any) {
 
     return res.json({ id: response.id, message: response.output_text });
   } catch (err: any) {
-    console.error('Chat function error:', err?.message || err);
-    return res.status(500).json({ error: 'Error generating response' });
+    console.error('Chat function error:', err);
+    const message = err?.message || String(err) || 'Error generating response';
+    return res.status(500).json({ error: 'Error generating response', details: message });
   }
 }
