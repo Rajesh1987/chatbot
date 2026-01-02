@@ -1,6 +1,6 @@
 // Use fetch directly to call OpenAI Responses API to avoid SDK/runtime incompatibilities in Vercel
 // Vercel maps /api/chat to this file when project root is packages/client
-import { template, parkInfo } from '../prompts';
+import { template, parkInfo } from '../prompts/index';
 
 export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
