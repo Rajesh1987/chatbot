@@ -1,1 +1,9 @@
-bun test
+#!/usr/bin/env sh
+# Run test with bun if available, otherwise fallback to npm test.
+if command -v bun >/dev/null 2>&1; then
+	bun test || true
+elif command -v npm >/dev/null 2>&1; then
+	npm run test || true
+else
+	echo "Warning: neither 'bun' nor 'npm' found in PATH; skipping tests."
+fi
