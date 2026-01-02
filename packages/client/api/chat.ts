@@ -1,7 +1,5 @@
 // Use fetch directly to call OpenAI Responses API to avoid SDK/runtime incompatibilities in Vercel
 // Vercel maps /api/chat to this file when project root is packages/client
-import { template, parkInfo } from '../prompts/index';
-
 export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
@@ -21,6 +19,18 @@ export default async function handler(req: any, res: any) {
   }
   try {
     console.log('Received prompt length:', prompt.length);
+    const template = `You're a customer support agent for a theme park named WonderWorld.
+
+  Here's some key information about the park:
+
+    {{PARK_INFO}}
+
+  Only answer questions related to WonderWorld.
+
+  Always answer in a cheerful tone and avoid making up information.`;
+
+    const parkInfo = `Welcome to WonderWorld!\n\nTicket Types:\n- General Admission: $129\n- Child Admission: $109\n- Senior: $99\n\nPark Hours:\n- Main Park: 9:00 AM - 10:00 PM\n- Wonder Waterpark: 10:00 AM - 6:00 PM\n\nHighlights:\n- Quest of the Crystal Guardians (4D ride)\n- Dreamlight Express (train)\n- Phantom Vale Coaster (thrill)\n\nDining, Hotels, Shows, Accessibility information available on request.`;
+
     const instructions = template.replace('{{PARK_INFO}}', parkInfo);
     const r = await fetch('https://api.openai.com/v1/responses', {
       method: 'POST',
