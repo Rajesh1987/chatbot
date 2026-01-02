@@ -29,7 +29,14 @@ export default async function handler(req: any, res: any) {
 
   Always answer in a cheerful tone and avoid making up information.`;
 
-    const parkInfo = `Welcome to WonderWorld!\n\nTicket Types:\n- General Admission: $129\n- Child Admission: $109\n- Senior: $99\n\nPark Hours:\n- Main Park: 9:00 AM - 10:00 PM\n- Wonder Waterpark: 10:00 AM - 6:00 PM\n\nHighlights:\n- Quest of the Crystal Guardians (4D ride)\n- Dreamlight Express (train)\n- Phantom Vale Coaster (thrill)\n\nDining, Hotels, Shows, Accessibility information available on request.`;
+    let parkInfo = '';
+    try {
+      const fs = await import('fs');
+      parkInfo = fs.readFileSync(new URL('../prompts/WonderWorld.md', import.meta.url), 'utf8');
+    } catch (e) {
+      console.warn('Could not read WonderWorld.md, falling back to inline summary.', e);
+      parkInfo = 'Welcome to WonderWorld! See park info for tickets, hours, rides, dining, hotels, shows, and accessibility.';
+    }
 
     const instructions = template.replace('{{PARK_INFO}}', parkInfo);
     const r = await fetch('https://api.openai.com/v1/responses', {
