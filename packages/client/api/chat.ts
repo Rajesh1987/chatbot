@@ -1,5 +1,7 @@
 // Use fetch directly to call OpenAI Responses API to avoid SDK/runtime incompatibilities in Vercel
 // Vercel maps /api/chat to this file when project root is packages/client
+import { template, parkInfo } from '../prompts';
+
 export default async function handler(req: any, res: any) {
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
@@ -19,6 +21,7 @@ export default async function handler(req: any, res: any) {
   }
   try {
     console.log('Received prompt length:', prompt.length);
+    const instructions = template.replace('{{PARK_INFO}}', parkInfo);
     const r = await fetch('https://api.openai.com/v1/responses', {
       method: 'POST',
       headers: {
@@ -27,6 +30,7 @@ export default async function handler(req: any, res: any) {
       },
       body: JSON.stringify({
         model: 'gpt-4o-mini',
+        instructions,
         input: prompt,
         temperature: 0.2,
         max_output_tokens: 300,
